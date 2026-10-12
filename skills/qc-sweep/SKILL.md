@@ -1,5 +1,5 @@
 ---
-name: "QC-Sweep"
+name: "qc-sweep"
 description: "Runs a rigorous 12-step quality-control review of an EXISTING document (reports, specs, proposals, memos, technical deliverables, letters) and returns a numbered, selectable fix menu — every issue classified Critical, Major, or Minor and paired with a proposed fix (lettered when a fix has options) that the user picks by number to apply. Covers editing artifacts, structure/formatting, content accuracy, completeness, clarity, grammar/style, data and visuals, citations (with mandatory external verification), visual rendering QA, and final compliance. Use when the user asks to \"run a QC sweep\", \"QC this document\", \"quality check this report\", \"review this document for quality\", \"do a document QC review\", \"proofread and quality-check this\", or \"run the 12-step review\". Do NOT use to CREATE or write a new document (use docx / pdf / pptx), to summarize a document's content (answer directly), or to review source code (use code-review)."
 ---
 

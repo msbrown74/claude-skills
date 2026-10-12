@@ -1,6 +1,6 @@
 # Claude Skills
 
-A place to store and sync all my LLM skills I use in Claude, Claude Code, and Claude Desktop. These can be adapted to be used in other LLMs.
+A place to store and sync the skills I use in Claude, Claude Code, and the Claude desktop app. They can be adapted for other AI tools.
 
 Each one is a custom [Agent Skill](https://platform.claude.com/docs/en/agents-and-tools/agent-skills/overview): a folder with a `SKILL.md` file that tells Claude how to handle one kind of task. Use them as they are, or adapt them to your own workflow.
 
@@ -35,7 +35,7 @@ On Claude Code 2.1.275 or later, one command does both:
 
 The skills then appear as `/core-skills:<skill-name>`, for example `/core-skills:text-humanization`.
 
-Auto-update is off by default for third-party marketplaces. To turn it on, run `/plugin`, open the **Marketplaces** tab, select `msbrown74-skills`, and choose **Enable auto-update**. To update by hand, run `/plugin marketplace update msbrown74-skills`.
+This plugin has no version number, so every new commit counts as an update. Auto-update is off by default for third-party marketplaces. To turn it on, run `/plugin`, open the **Marketplaces** tab, select `msbrown74-skills`, and choose **Enable auto-update**. To update by hand, run `/plugin marketplace update msbrown74-skills`.
 
 Installing the plugin adds roughly 2,000 tokens of skill descriptions to every session (a Claude Code estimate). If you only need a few skills, use one of the options below instead.
 
@@ -54,14 +54,14 @@ Custom skills are managed separately in each place Claude runs them, so install 
 ## Repository layout
 
 ```
-.claude-plugin/                   Plugin and marketplace catalog for Claude Code
-skills/<skill-name>/SKILL.md      Source for each skill
-zips/Skill - <skill-name> (vX.Y.Z).zip    Upload-ready package for each skill
+.claude-plugin/                          Plugin and marketplace catalog for Claude Code
+skills/<skill-name>/SKILL.md             Source for each skill
+zips/Skill - <skill-name> (vX.Y.Z).zip   Upload-ready package for each skill
 ```
 
 ## Versions
 
-Zip file names carry a version number (`vMAJOR.MINOR.PATCH`). The numbers follow this repository's own convention:
+Zip file names carry a version number (`vMAJOR.MINOR.PATCH`), which follows this repository's own convention:
 
 - **MAJOR**: structural, procedural, or technical changes to how the skill works
 - **MINOR**: substantive content changes
