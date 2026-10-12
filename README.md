@@ -18,13 +18,34 @@ Each one is a custom [Agent Skill](https://platform.claude.com/docs/en/agents-an
 
 ## Install
 
-**Claude (web or desktop app)**
+**Claude Code plugin (all seven skills at once)**
+
+This repository is also a Claude Code plugin marketplace. In Claude Code on your computer (terminal, desktop app, or VS Code), run:
+
+```
+/plugin marketplace add msbrown74/claude-skills
+/plugin install core-skills@msbrown74-skills
+```
+
+On Claude Code 2.1.275 or later, one command does both:
+
+```
+/plugin install core-skills --marketplace msbrown74/claude-skills
+```
+
+The skills then appear as `/core-skills:<skill-name>`, for example `/core-skills:qc-sweep`.
+
+Auto-update is off by default for third-party marketplaces. To turn it on, run `/plugin`, open the **Marketplaces** tab, select `msbrown74-skills`, and choose **Enable auto-update**. To update by hand, run `/plugin marketplace update msbrown74-skills`.
+
+Installing the plugin adds roughly 2,000 tokens of skill descriptions to every session (a Claude Code estimate). If you only need a few skills, use one of the options below instead.
+
+**Claude (web or desktop app), one skill at a time**
 
 1. Download the zip for the skill you want from the [`zips`](zips/) folder.
-2. In Claude, open **Customize → Skills** and upload the zip.
-3. To update a skill you already installed, use **Upload and Replace** from that skill's menu.
+2. In Claude, open **Customize → Skills**, click **+**, choose **Create skill**, then **Upload a skill**, and select the zip.
+3. To update a skill, upload the newer zip.
 
-**Claude Code**
+**Claude Code, one skill at a time**
 
 Copy the skill's folder from [`skills`](skills/) into `~/.claude/skills/` (all projects) or `.claude/skills/` (one project).
 
@@ -33,6 +54,7 @@ Custom skills are managed separately in each place Claude runs them, so install 
 ## Repository layout
 
 ```
+.claude-plugin/                   Plugin and marketplace catalog for Claude Code
 skills/<skill-name>/SKILL.md      Source for each skill
 zips/Skill - <skill-name> (vX.Y.Z).zip    Upload-ready package for each skill
 ```

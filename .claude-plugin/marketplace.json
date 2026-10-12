@@ -1,0 +1,13 @@
+{
+  "name": "msbrown74-skills",
+  "description": "Personal collection of custom Claude skills by msbrown74.",
+  "owner": { "name": "msbrown74" },
+  "plugins": [
+    {
+      "name": "core-skills",
+      "source": "./",
+      "description": "Seven custom skills: delta-sync-maintenance, qc-sweep, qc-sweep-xlsx, reverse-outlining-documents, text-humanization, thread-archivist, and truth-seeking-panel.",
+      "category": "productivity"
+    }
+  ]
+}

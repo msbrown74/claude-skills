@@ -1,0 +1,9 @@
+{
+  "name": "core-skills",
+  "description": "Custom skills for document and spreadsheet QC, reverse outlining, text humanization, thread handoffs, expert-panel review, and project-instruction sync.",
+  "author": { "name": "msbrown74" },
+  "homepage": "https://github.com/msbrown74/claude-skills",
+  "repository": "https://github.com/msbrown74/claude-skills",
+  "license": "MIT",
+  "keywords": ["skills", "qc", "documents", "spreadsheets", "writing", "review"]
+}
