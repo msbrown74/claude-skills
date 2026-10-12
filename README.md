@@ -33,7 +33,7 @@ On Claude Code 2.1.275 or later, one command does both:
 /plugin install core-skills --marketplace msbrown74/claude-skills
 ```
 
-The skills then appear as `/core-skills:<skill-name>`, for example `/core-skills:qc-sweep`.
+The skills then appear as `/core-skills:<skill-name>`, for example `/core-skills:text-humanization`.
 
 Auto-update is off by default for third-party marketplaces. To turn it on, run `/plugin`, open the **Marketplaces** tab, select `msbrown74-skills`, and choose **Enable auto-update**. To update by hand, run `/plugin marketplace update msbrown74-skills`.
 
@@ -61,7 +61,7 @@ zips/Skill - <skill-name> (vX.Y.Z).zip    Upload-ready package for each skill
 
 ## Versions
 
-Zip files carry a [semantic version](https://semver.org/) in their names:
+Zip file names carry a version number (`vMAJOR.MINOR.PATCH`). The numbers follow this repository's own convention:
 
 - **MAJOR**: structural, procedural, or technical changes to how the skill works
 - **MINOR**: substantive content changes
