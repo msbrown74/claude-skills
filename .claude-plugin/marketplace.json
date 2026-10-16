@@ -6,7 +6,7 @@
     {
       "name": "core-skills",
       "source": "./",
-      "description": "Seven custom skills: delta-sync-maintenance, qc-sweep, qc-sweep-xlsx, reverse-outlining-documents, text-humanization, thread-archivist, and truth-seeking-panel.",
+      "description": "Eight custom skills: delta-sync-maintenance, prompt-maestro, qc-sweep, qc-sweep-xlsx, reverse-outlining-documents, text-humanization, thread-archivist, and truth-seeking-panel.",
       "category": "productivity"
     }
   ]

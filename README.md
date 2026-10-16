@@ -9,6 +9,7 @@ Each one is a custom [Agent Skill](https://platform.claude.com/docs/en/agents-an
 | Skill | What it does | Try saying |
 |---|---|---|
 | [`delta-sync-maintenance`](skills/delta-sync-maintenance/SKILL.md) | Reviews recent chats in a Claude Project and turns the confirmed facts into a refreshed Project Instructions block. | "run delta-sync" |
+| [`prompt-maestro`](skills/prompt-maestro/SKILL.md) | Writes, fixes, and adapts prompts for a specific AI tool (LLMs, coding agents, image, video, voice, and workflow tools). Based on prompt-master by nidhinjs, MIT. | "write a prompt for Midjourney" |
 | [`qc-sweep`](skills/qc-sweep/SKILL.md) | Runs a 12-step quality-control review of an existing document and returns a numbered fix menu ranked Critical, Major, or Minor. | "run a QC sweep on this document" |
 | [`qc-sweep-xlsx`](skills/qc-sweep-xlsx/SKILL.md) | Runs the same style of 12-step review on a spreadsheet or workbook, covering formulas, hidden content, links, and data integrity. | "run a QC sweep on this workbook" |
 | [`reverse-outlining-documents`](skills/reverse-outlining-documents/SKILL.md) | Extracts the heading hierarchy of an existing document into a read-only outline with structural notes. | "reverse outline this" |
@@ -18,7 +19,7 @@ Each one is a custom [Agent Skill](https://platform.claude.com/docs/en/agents-an
 
 ## Install
 
-**Claude Code plugin (all seven skills at once)**
+**Claude Code plugin (all eight skills at once)**
 
 This repository is also a Claude Code plugin marketplace. In Claude Code on your computer (terminal, desktop app, or VS Code), run:
 
@@ -55,7 +56,7 @@ Custom skills are managed separately in each place Claude runs them, so install 
 
 ```
 .claude-plugin/                          Plugin and marketplace catalog for Claude Code
-skills/<skill-name>/SKILL.md             Source for each skill
+skills/<skill-name>/SKILL.md             Source for each skill (a skill folder can also hold references and a LICENSE)
 zips/Skill - <skill-name> (vX.Y.Z).zip   Upload-ready package for each skill
 ```
 
