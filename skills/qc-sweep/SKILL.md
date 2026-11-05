@@ -1,14 +1,14 @@
 ---
 name: "qc-sweep"
-description: "Runs a rigorous 12-step quality-control review of an EXISTING document (reports, specs, proposals, memos, technical deliverables, letters) and returns a numbered, selectable fix menu — every issue classified Critical, Major, or Minor and paired with a proposed fix (lettered when a fix has options) that the user picks by number to apply. Covers editing artifacts, structure/formatting, content accuracy, completeness, clarity, grammar/style, data and visuals, citations (with mandatory external verification), visual rendering QA, and final compliance. Use when the user asks to \"run a QC sweep\", \"QC this document\", \"quality check this report\", \"review this document for quality\", \"do a document QC review\", \"proofread and quality-check this\", or \"run the 12-step review\". Do NOT use to CREATE or write a new document (use docx / pdf / pptx), to summarize a document's content (answer directly), or to review source code (use code-review)."
+description: "Runs a rigorous 12-step quality-control review of an EXISTING document (reports, specs, proposals, memos, technical deliverables, letters) and returns a tabulated, selectable fix menu — every issue classified Critical, Major, or Minor, given a reason, and paired with a proposed fix (lettered when a fix has options) that the user picks by ID to apply. Covers editing artifacts, structure/formatting, content accuracy, completeness, clarity, grammar/style, data and visuals, citations (with mandatory external verification), visual rendering QA, and final compliance. Use when the user asks to \"run a QC sweep\", \"QC this document\", \"quality check this report\", \"review this document for quality\", \"do a document QC review\", \"proofread and quality-check this\", or \"run the 12-step review\". Do NOT use to CREATE or write a new document (use docx / pdf / pptx), to summarize a document's content (answer directly), or to review source code (use code-review)."
 ---
 
 # QC-Sweep
 
 A disciplined 12-step quality-control review for finished or near-finished
-documents. It produces a **numbered menu of findings** — every issue located,
-explained, classified by severity, and paired with a proposed fix — then applies
-exactly the fixes the user selects by number. It never rewrites the document on
+documents. It produces a **tabulated menu of findings** — every issue located,
+classified by severity, explained, and paired with a proposed fix — then applies
+exactly the fixes the user selects by ID. It never rewrites the document on
 its own.
 
 ## When to Use
@@ -36,9 +36,10 @@ User: "Run a QC sweep on this report"  (file in input/)
    formatting/citation standard. If the standard is unclear, ASK. If still none,
    infer one, state it as an assumption, and confirm before enforcing.
 3. STEPS 2-12 — Work the sweep in order, recording findings with severity.
-4. Present a NUMBERED fix menu: Critical → Major → Minor, each issue paired with a
-   proposed fix (letter the options — 4A/4B/4C — when a fix has alternatives).
-5. The user replies with the numbers/letters to apply; apply only those, re-run
+4. Present a TABULATED fix menu with severity-prefixed IDs (C1, C2… M1, M2… N1, N2…):
+   Critical → Major → Minor, each issue with its reason and proposed fix (letter the
+   options — M4A/M4B/M4C — when a fix has alternatives).
+5. The user replies with the IDs/letters to apply; apply only those, re-run
    rendering QA (Step 11), save the revised file, and loop if they want another round.
 ```
 
@@ -121,65 +122,86 @@ effectively achieves its purpose.
 
 ## Severity Classification (apply to EVERY finding)
 Tag each finding exactly one level:
-- **Critical** — blocks delivery: factual/data errors, missing required sections,
+- **Critical (C)** — blocks delivery: factual/data errors, missing required sections,
   unresolved placeholders, citation/verification failures, compliance violations,
   or anything that misleads the reader.
-- **Major** — significant quality problem that should be fixed before delivery:
+- **Major (M)** — significant quality problem that should be fixed before delivery:
   structural inconsistency, unsupported claims, broken citation–reference matches,
   rendering breakage, audience mismatch.
-- **Minor** — polish: wording, tone, cosmetic spacing, non-blocking style nits.
+- **Minor (N)** — polish: wording, tone, cosmetic spacing, non-blocking style nits.
+  (Prefixed `N`, not `m`, so Minor IDs are never confused with Major IDs by case.)
 
-## Output — a numbered, selectable fix menu
+## Output — a tabulated, selectable fix menu
 Present findings as an **actionable menu the user can choose from**, not a static
-report. **Always render the numbered fix options list inline** so the user can
-select from it — it is never hidden inside a file. What accompanies it inline,
-and whether a file is saved, depends on the QC report's length (rule of thumb:
-treat it as long once the list runs past ~10-12 findings or the detail won't sit
-comfortably in a chat reply):
+report. **Always render the findings table inline** so the user can select from
+it — it is never hidden inside a file. What accompanies it inline, and whether a
+file is saved, depends on the **size of the document under review**, not the
+number of findings (rule of thumb: treat it as large at about 10+ pages of
+content; otherwise small):
 
-- **Short report** → render the whole thing inline as markdown — header, severity
-  summary, and the numbered fix options list. Save no file.
-- **Long report** → render inline a **concise summary** (header + severity summary)
-  followed by the **full numbered fix options list**, THEN save the complete,
+- **Small document** → render the whole thing inline as markdown — header,
+  severity summary, and the findings table. Save no file unless the user asks.
+- **Large document** → render inline a **concise summary** (header + severity
+  summary) followed by the **full findings table**, THEN save the complete,
   detailed report (every finding with its location, evidence, citation
-  verification log, and fix rationale) as a Markdown file in `output/`, named
-  `<original_doc>-QC-<YYYY-MM-DD>-<HHMM>.md` from the user's local date and time
-  (filename-safe, no colons — e.g. `WellfieldReport-QC-2026-06-30-1305.md`).
-  Glob-confirm the file exists before telling the user where it is.
+  verification log, and fix rationale) as a separate Markdown file in `output/`,
+  named per the file-naming rules below. Glob-confirm the file exists before
+  telling the user where it is.
+- **Never put the QC report inside the document** — no appended pages or
+  sections, comment blocks, or inserted tables, regardless of document size or
+  the tool in use. The report lives only in chat and, for large documents, in the
+  separate file. The only changes to the document are the fixes the user selects.
 
 Whether shown inline or written to the saved file, use this structure:
 1. **Header** — document name, type, audience, risk tier, and the formatting/
    citation standard used (note "assumed, confirmed" if inferred).
 2. **Severity summary** — counts of Critical / Major / Minor and an overall
    **go / no-go** verdict.
-3. **Numbered findings (the fix options list)** — ONE continuously numbered list
-   (1, 2, 3 …) running through the severity groups in order: **Critical first, then Major, then
-   Minor.** Number every issue uniquely (never restart numbering inside a group)
-   so each can be selected. Format each entry as:
-   `N. [SEVERITY] Location — the issue → proposed fix`
-   - **When a finding has more than one reasonable fix, letter the options** under
-     that number — `4A`, `4B`, `4C` — each a distinct, self-contained alternative
-     (e.g. 4A reword, 4B delete the sentence, 4C add a supporting citation). The
-     user picks at most one letter for that finding.
+3. **Findings table (the fix menu)** — one table with the columns
+   `ID | Severity | Location | Finding | Reason | Proposed fix`.
+   - **IDs are severity-prefixed and sequential within each group:** `C1, C2, C3…`
+     then `M1, M2, M3…` then `N1, N2, N3…`. Rows run Critical first, then Major,
+     then Minor. Never reuse an ID.
+   - **Finding** = what is wrong, stated factually. **Reason** = why it matters
+     (the standard, requirement, or reader impact it violates). **Proposed fix** =
+     the concrete change.
+   - **When a finding has more than one reasonable fix, letter the options** inside
+     the Proposed fix cell — `M4A`, `M4B`, `M4C` — each a distinct, self-contained
+     alternative (e.g. M4A reword, M4B delete the sentence, M4C add a supporting
+     citation). The user picks at most one letter per finding.
 4. **Citation verification log** — each checked claim, the source consulted, and
-   verified / unverified.
-5. **Selection prompt** — tell the user exactly how to choose: reply with the
-   numbers they want applied, adding a letter for any lettered finding — e.g.
-   `1, 3, 4B, 7`. Also accept ranges (`1-5`), `all`, `all critical`, or `none`.
+   verified / unverified. (Belongs in the QC report only — never in the document.)
+5. **Selection prompt** — tell the user exactly how to choose: reply with the IDs
+   they want applied, adding a letter for any lettered finding — e.g.
+   `C1, M3, M4B, N2`. Also accept ranges within one group (`C1-C3`), `all critical`,
+   `all major`, `all minor`, `all`, or `none`.
+
+### File naming (defaults; the user's stated convention overrides)
+- **Saved QC report:** `YYYY-MM-DD QC Report - <Document Subject>.md`, using the
+  user's local date. If another file shares that date, append a lowercase suffix in
+  creation order to the date (`YYYY-MM-DDa`, `YYYY-MM-DDb`), omitted for a single file.
+- **Revised document:** a new file; never overwrite or rename the original. If the
+  original carries a version `(vMAJOR.MINOR.PATCH)`, increment it (MAJOR =
+  structural/procedural/technical, MINOR = substantive content, PATCH =
+  editorial/formatting/admin/error fixes). If it is unversioned, keep its name and
+  append `(QC revised)`. Tell the user the prior version can be prefixed `delete_me-`
+  at their discretion; do not rename it, issue reminders, or delete anything.
+- Use spaces as primary separators, hyphens for hierarchy, parentheses for
+  metadata; avoid OS-disallowed characters.
 
 ## Applying the selected fixes (selection loop)
 After the user replies with their selection:
-1. Map each chosen number to its finding; for a lettered finding, apply only the
+1. Map each chosen ID to its finding; for a lettered finding, apply only the
    chosen option. Ignore every finding the user did not select.
 2. Apply the fixes with the format-appropriate editor (`docx` for Word, `pdf` for
    PDF). Change only what the selected fixes specify — nothing else.
 3. Re-run **Step 11 (visual rendering QA)** and re-verify the edited passages so
    no fix introduced a new problem (layout shift, table reflow, broken citation).
-4. Save the revised document to `output/` under a new name (e.g.
-   `<original>-QC-revised`); never overwrite the user's original.
-5. Report back: which numbered fixes were applied, which were skipped, and any new
-   issue the recheck found — re-listed in the same numbered format so the user can
-   run another selection round.
+4. Save the revised document to `output/` under a new name (see File naming);
+   never overwrite the user's original.
+5. Report back: which IDs were applied, which were skipped, and any new issue the
+   recheck found — re-listed in the same table format so the user can run another
+   selection round.
 
 ## Guardrails
 - **Context gate (Step 1) is mandatory.** If type/purpose/audience/risk/standard
@@ -190,15 +212,16 @@ After the user replies with their selection:
 - **Protect sensitive content.** If the document contains PII, credentials, or
   confidential data, never reproduce it verbatim in the findings report — redact
   it or reference it by location instead, and respect the document's privacy.
-- **Every finding gets a severity.** No unclassified issues; always classify.
+- **Every finding gets a severity and a reason.** No unclassified or unexplained issues.
+- **The report never goes into the document.** No QC pages, comments, or inserted
+  sections unless the user explicitly asks for one.
 - **Never fabricate.** Do not invent the document's contents, sources, or quotes.
   If a file cannot be read, say so and ask for a re-attach — never substitute
   sample or placeholder content.
-- **Apply only what the user selects.** Present the numbered fix menu and wait;
+- **Apply only what the user selects.** Present the findings table and wait;
   edit the document only for the findings (and lettered options) the user picks.
   Never apply an unselected fix, and never auto-rewrite the whole document.
 - **Preserve the original.** Save revisions as a new file in `output/`; never
-  overwrite the user's uploaded document, and re-run rendering QA after applying.
+  overwrite or rename the user's uploaded document, and re-run rendering QA after applying.
 - **Order matters.** Remove editing artifacts (Step 2) before other checks, and
   re-run rendering QA (Step 11) after any revisions.
-

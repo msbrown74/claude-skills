@@ -1,14 +1,14 @@
 ---
 name: "qc-sweep-xlsx"
-description: "Runs a rigorous 12-step quality-control review of an EXISTING spreadsheet/workbook (.xlsx, .xlsm, .xltx, .csv) and returns a numbered, selectable fix menu — every issue classified Critical, Major, or Minor and paired with a proposed fix (lettered when a fix has options) that the user picks by number to apply. Covers hidden artifacts (hidden sheets/rows/columns, filters, comments, defined names, stale links), structure/layout, rendering QA, formula/value accuracy, completeness, data integrity and input controls, clarity, label/note grammar and style, cell/sheet dependency validation, external links and data sources, and a final compliance read-through. Use for \"run a QC sweep on this workbook/spreadsheet\", \"QC this spreadsheet\", \"quality check this Excel file\", \"audit this model\", or \"run the 12-step spreadsheet review\". Do NOT use to build a new spreadsheet (use xlsx), to summarize its contents (answer directly), or to QC a Word/PDF/PPT document (use qc-sweep)."
+description: "Runs a rigorous 12-step quality-control review of an EXISTING spreadsheet/workbook (.xlsx, .xlsm, .xltx, .csv) and returns a tabulated, selectable fix menu — every issue classified Critical, Major, or Minor, given a reason, and paired with a proposed fix (lettered when a fix has options) that the user picks by ID to apply. Covers hidden artifacts (hidden sheets/rows/columns, filters, comments, defined names, stale links), structure/layout, rendering QA, formula/value accuracy, completeness, data integrity and input controls, clarity, label/note grammar and style, cell/sheet dependency validation, external links and data sources, and a final compliance read-through. Use for \"run a QC sweep on this workbook/spreadsheet\", \"QC this spreadsheet\", \"quality check this Excel file\", \"audit this model\", or \"run the 12-step spreadsheet review\". Do NOT use to build a new spreadsheet (use xlsx), to summarize its contents (answer directly), or to QC a Word/PDF/PPT document (use qc-sweep)."
 ---
 
 # QC-Sweep-XLSX
 
 A disciplined 12-step quality-control review for finished or near-finished
-spreadsheets and workbooks. It produces a **numbered menu of findings** — every
-issue located, explained, classified by severity, and paired with a proposed
-fix — then applies exactly the fixes the user selects by number. It never
+spreadsheets and workbooks. It produces a **tabulated menu of findings** — every
+issue located, classified by severity, explained, and paired with a proposed
+fix — then applies exactly the fixes the user selects by ID. It never
 rewrites the workbook on its own.
 
 ## When to Use
@@ -38,10 +38,10 @@ User: "Run a QC sweep on this workbook"  (file in input/)
    external links). If unclear, ASK. If still none, infer, state the
    assumption, and confirm before enforcing.
 3. STEPS 2-12 — Work the sweep in order, recording findings with severity.
-4. Present a NUMBERED fix menu: Critical → Major → Minor, each issue paired
-   with a proposed fix (letter the options — 4A/4B/4C — when a fix has
-   alternatives).
-5. The user replies with the numbers/letters to apply; apply only those,
+4. Present a TABULATED fix menu with severity-prefixed IDs (C1, C2… M1, M2…
+   N1, N2…): Critical → Major → Minor, each issue with its reason and proposed
+   fix (letter the options — M4A/M4B/M4C — when a fix has alternatives).
+5. The user replies with the IDs/letters to apply; apply only those,
    re-run rendering QA (Step 12), save the revised file, and loop if they want
    another round.
 ```
@@ -105,6 +105,23 @@ calculated values; confirm data types/formats are consistent; check that data
 validation rules or sheet/workbook protections are applied where needed to
 prevent invalid or inconsistent inputs.
 
+**Hard-coded variable factors.** Scan formulas for numeric literals that
+represent variable factors — values that could plausibly change (e.g., chemical
+strengths, dose factors, design parameters, rates, allowances). Best practice is
+a labeled, pre-filled input cell that the formula references, so assumptions are
+visible and the calculation is easier to follow. **Do not flag** unit
+conversions or mathematical/universal constants. Classify as follows:
+- **Minor** (default): a correct, single-use literal that would read better as a
+  labeled input.
+- **Major**: the same literal repeated across multiple formulas or sheets, or a
+  design/engineering parameter with no visible label anywhere in the workbook.
+- **Critical**: the literal contradicts or silently overrides an existing input
+  cell for the same quantity (report it as an accuracy finding under Step 5 or 10).
+
+Standard lettered fix options: **A** — move the value to a labeled input cell
+and reference it; **B** — leave it in place and add a note or comment documenting
+the value and its source.
+
 ### Step 8 — Clarity and audience fit
 Ensure the workbook matches the defined audience, follows a logical flow,
 clearly labels assumptions/inputs/outputs, introduces concepts before use, and
@@ -138,67 +155,94 @@ used without introducing risk.
 
 ## Severity Classification (apply to EVERY finding)
 Tag each finding exactly one level:
-- **Critical** — blocks delivery: formula/value errors, broken or circular
+- **Critical (C)** — blocks delivery: formula/value errors, broken or circular
   references, missing required inputs/outputs, unresolved placeholders,
-  unprotected inputs that invite corruption, or anything that would mislead
-  the user of the workbook.
-- **Major** — significant quality problem that should be fixed before
+  unprotected inputs that invite corruption, a hard-coded value that overrides
+  an existing input cell, or anything that would mislead the user of the workbook.
+- **Major (M)** — significant quality problem that should be fixed before
   delivery: structural inconsistency, unsupported assumptions, broken
   dependency chains, rendering breakage, audience mismatch, missing data
-  validation on a key input.
-- **Minor** — polish: wording, tone, cosmetic formatting, non-blocking style
-  nits.
+  validation on a key input, repeated hard-coded variable factors or unlabeled
+  design parameters (see Step 7).
+- **Minor (N)** — polish: wording, tone, cosmetic formatting, non-blocking style
+  nits, a correct single-use hard-coded variable factor that would read better as
+  a labeled input (see Step 7). (Prefixed `N`, not `m`, so Minor IDs are never confused with Major IDs
+  by case.)
 
-## Output — a numbered, selectable fix menu
+## Output — a tabulated, selectable fix menu
 Present findings as an **actionable menu the user can choose from**, not a
-static report. **Always render the numbered fix options list inline** so the
-user can select from it — it is never hidden inside a file. What accompanies
-it inline, and whether a file is saved, depends on the QC report's length
-(rule of thumb: treat it as long once the list runs past ~10-12 findings or
-the detail won't sit comfortably in a chat reply):
+static report. **Always render the findings table inline** so the user can
+select from it — it is never hidden inside a file. What accompanies it inline,
+and whether a file is saved, depends on the **size of the workbook under
+review**, not the number of findings (rule of thumb: treat it as large when its
+content would run about 10+ pages, e.g. many populated sheets or extensive
+tables; otherwise small):
 
-- **Short report** → render the whole thing inline as markdown — header,
-  severity summary, and the numbered fix options list. Save no file.
-- **Long report** → render inline a **concise summary** (header + severity
-  summary) followed by the **full numbered fix options list**, THEN save the
-  complete, detailed report (every finding with its location — sheet!cell or
-  range — evidence, and fix rationale) as a Markdown file in `output/`, named
-  `<original_workbook>-QC-<YYYY-MM-DD>-<HHMM>.md` from the user's local date
-  and time (filename-safe, no colons). Glob-confirm the file exists before
-  telling the user where it is.
+- **Small workbook** → render the whole thing inline as markdown — header,
+  severity summary, and the findings table. Save no file unless the user asks.
+- **Large workbook** → render inline a **concise summary** (header + severity
+  summary) followed by the **full findings table**, THEN save the complete,
+  detailed report (every finding with its location — sheet!cell or range —
+  evidence, and fix rationale) as a separate Markdown file in `output/`, named
+  per the file-naming rules below. Glob-confirm the file exists before telling
+  the user where it is.
+- **Never put the QC report inside the workbook** — no new tab or sheet, cell
+  notes, comments, or appended ranges, regardless of workbook size or the tool
+  in use. The report lives only in chat and, for large workbooks, in the
+  separate file. The only changes to the workbook are the fixes the user selects.
 
 Whether shown inline or written to the saved file, use this structure:
 1. **Header** — workbook name, type, audience, risk tier, platform, and
    feature scope (note "assumed, confirmed" if inferred).
 2. **Severity summary** — counts of Critical / Major / Minor and an overall
    **go / no-go** verdict.
-3. **Numbered findings (the fix options list)** — ONE continuously numbered
-   list (1, 2, 3 …) running through the severity groups in order: **Critical
-   first, then Major, then Minor.** Number every issue uniquely (never restart
-   numbering inside a group) so each can be selected. Format each entry as:
-   `N. [SEVERITY] Sheet!Location — the issue → proposed fix`
+3. **Findings table (the fix menu)** — one table with the columns
+   `ID | Severity | Location | Finding | Reason | Proposed fix`.
+   - **IDs are severity-prefixed and sequential within each group:** `C1, C2,
+     C3…` then `M1, M2, M3…` then `N1, N2, N3…`. Rows run Critical first, then
+     Major, then Minor. Never reuse an ID.
+   - **Location** is `Sheet!Cell` or `Sheet!Range` (or the sheet/object name
+     for workbook-level items). **Finding** = what is wrong, stated factually.
+     **Reason** = why it matters (the standard, requirement, or user impact it
+     violates). **Proposed fix** = the concrete change.
    - **When a finding has more than one reasonable fix, letter the options**
-     under that number — `4A`, `4B`, `4C` — each a distinct, self-contained
-     alternative (e.g. 4A correct the formula, 4B add a data-validation rule,
-     4C flag the cell for manual review). The user picks at most one letter
-     for that finding.
+     inside the Proposed fix cell — `M4A`, `M4B`, `M4C` — each a distinct,
+     self-contained alternative (e.g. M4A correct the formula, M4B add a
+     data-validation rule, M4C flag the cell for manual review). The user picks
+     at most one letter per finding.
 4. **Selection prompt** — tell the user exactly how to choose: reply with the
-   numbers they want applied, adding a letter for any lettered finding — e.g.
-   `1, 3, 4B, 7`. Also accept ranges (`1-5`), `all`, `all critical`, or `none`.
+   IDs they want applied, adding a letter for any lettered finding — e.g.
+   `C1, M3, M4B, N2`. Also accept ranges within one group (`C1-C3`),
+   `all critical`, `all major`, `all minor`, `all`, or `none`.
+
+### File naming (defaults; the user's stated convention overrides)
+- **Saved QC report:** `YYYY-MM-DD QC Report - <Workbook Subject>.md`, using the
+  user's local date. If another file shares that date, append a lowercase suffix
+  in creation order to the date (`YYYY-MM-DDa`, `YYYY-MM-DDb`), omitted for a
+  single file.
+- **Revised workbook:** a new file; never overwrite or rename the original. If
+  the original carries a version `(vMAJOR.MINOR.PATCH)`, increment it (MAJOR =
+  structural/procedural/technical, MINOR = substantive content, PATCH =
+  editorial/formatting/admin/error fixes). If it is unversioned, keep its name
+  and append `(QC revised)`. Keep the original extension. Tell the user the
+  prior version can be prefixed `delete_me-` at their discretion; do not rename
+  it, issue reminders, or delete anything.
+- Use spaces as primary separators, hyphens for hierarchy, parentheses for
+  metadata; avoid OS-disallowed characters.
 
 ## Applying the selected fixes (selection loop)
 After the user replies with their selection:
-1. Map each chosen number to its finding; for a lettered finding, apply only
+1. Map each chosen ID to its finding; for a lettered finding, apply only
    the chosen option. Ignore every finding the user did not select.
 2. Apply the fixes with the `xlsx` skill. Change only what the selected fixes
    specify — nothing else (don't "clean up" unrelated cells or formatting).
 3. Re-run **Step 12 (visual rendering QA + final read-through)** and re-verify
    the edited formulas/ranges so no fix introduced a new problem (broken
    reference, formatting drift, validation gap).
-4. Save the revised workbook to `output/` under a new name (e.g.
-   `<original>-QC-revised.xlsx`); never overwrite the user's original.
-5. Report back: which numbered fixes were applied, which were skipped, and any
-   new issue the recheck found — re-listed in the same numbered format so the
+4. Save the revised workbook to `output/` under a new name (see File naming);
+   never overwrite the user's original.
+5. Report back: which IDs were applied, which were skipped, and any
+   new issue the recheck found — re-listed in the same table format so the
    user can run another selection round.
 
 ## Guardrails
@@ -209,16 +253,19 @@ After the user replies with their selection:
   pricing, or confidential data, never reproduce it verbatim in the findings
   report — reference it by sheet/cell location instead, and respect the
   workbook's privacy.
-- **Every finding gets a severity.** No unclassified issues; always classify.
+- **Every finding gets a severity and a reason.** No unclassified or
+  unexplained issues.
+- **The report never goes into the workbook.** No QC tab, comments, or notes
+  unless the user explicitly asks for one.
 - **Never fabricate.** Do not invent the workbook's contents, formulas, or
   values. If a file cannot be read, say so and ask for a re-attach — never
   substitute sample or placeholder content.
-- **Apply only what the user selects.** Present the numbered fix menu and
+- **Apply only what the user selects.** Present the findings table and
   wait; edit the workbook only for the findings (and lettered options) the
   user picks. Never apply an unselected fix, and never auto-rewrite the whole
   workbook.
 - **Preserve the original.** Save revisions as a new file in `output/`; never
-  overwrite the user's uploaded workbook, and re-run rendering QA after
-  applying fixes.
+  overwrite or rename the user's uploaded workbook, and re-run rendering QA
+  after applying fixes.
 - **Order matters.** Remove hidden artifacts (Step 2) before other checks, and
   re-run rendering QA (Step 12) after any revisions.
