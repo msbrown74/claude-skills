@@ -9,6 +9,7 @@ Each one is a custom [Agent Skill](https://platform.claude.com/docs/en/agents-an
 | Skill | What it does | Try saying |
 |---|---|---|
 | [`delta-sync-maintenance`](skills/delta-sync-maintenance/SKILL.md) | Reviews recent chats in a Claude Project and turns the confirmed facts into a refreshed Project Instructions block. | "run delta-sync" |
+| [`memory-dream`](skills/memory-dream/SKILL.md) | Audits Claude's persistent memory for contradictions, stale or duplicate facts, and bloat, then proposes a cleanup plan and applies only what you approve. Scheduled runs are report-only. | "clean up my memory" |
 | [`prompt-maestro`](skills/prompt-maestro/SKILL.md) | Writes, fixes, and adapts prompts for a specific AI tool (LLMs, coding agents, image, video, voice, and workflow tools). Based on prompt-master by nidhinjs, MIT. | "write a prompt for Midjourney" |
 | [`qc-sweep`](skills/qc-sweep/SKILL.md) | Runs a 12-step quality-control review of an existing document and returns a tabulated fix menu ranked Critical, Major, or Minor. | "run a QC sweep on this document" |
 | [`qc-sweep-xlsx`](skills/qc-sweep-xlsx/SKILL.md) | Runs the same style of 12-step review on a spreadsheet or workbook, covering formulas, hidden content, links, and data integrity. | "run a QC sweep on this workbook" |
@@ -19,7 +20,7 @@ Each one is a custom [Agent Skill](https://platform.claude.com/docs/en/agents-an
 
 ## Install
 
-**Claude Code plugin (all eight skills at once)**
+**Claude Code plugin (all nine skills at once)**
 
 This repository is also a Claude Code plugin marketplace. In Claude Code on your computer (terminal, desktop app, or VS Code), run:
 
