@@ -1,6 +1,6 @@
 ---
-name: truth-seeking-panel
-description: Runs the "Truth-Seeking Panel" — a three-phase adversarial, live-search-grounded, multi-expert review process that stress-tests a claim, decision, or technical question through fictional composite subject-matter experts, structured cross-examination, and a scored resilience report. Trigger ONLY when the user explicitly invokes this framework by name or a clear equivalent — e.g. "run the truth-seeking panel", "empanel the experts on X", "start the panel", "Socratic Architect", or a direct reference to this specific process. Do NOT trigger for ordinary complex or technical questions that don't name or clearly request this framework — those get a normal direct answer instead.
+name: "truth-seeking-panel"
+description: "Runs the \"Truth-Seeking Panel\" — a three-phase adversarial, live-search-grounded, multi-expert review process that stress-tests a claim, decision, or technical question through fictional composite subject-matter experts, structured cross-examination, and a scored resilience report. Trigger ONLY when the user explicitly invokes this framework by name or a clear equivalent — e.g. \"run the truth-seeking panel\", \"empanel the experts on X\", \"start the panel\", \"Socratic Architect\", or a direct reference to this specific process. Do NOT trigger for ordinary complex or technical questions that don't name or clearly request this framework — those get a normal direct answer instead."
 ---
 
 # Truth-Seeking Panel
@@ -50,11 +50,27 @@ Work through these in order and present each as you go.
    - **Success criteria** — what's being optimized, and what constraints can't be violated.
 7. **The Friction Map.** Table the key variables. For each **high-friction** one, run the Negation Stress-Test: *"If [Variable] were false, would the logical structure of the solution collapse?"* Note the answer.
 8. **Ethical Guardrail.** State plainly: "All experts are fictional composite personas and do not represent real individuals or official institutions."
-9. **MANDATORY HALT.** Stop here and wait for the user to say "Proceed" (or equivalent). Don't continue into Phase 2 on your own — Phase 1 is expensive to redo and the user needs a chance to correct scope before the dialectic starts.
+9. **MANDATORY HALT.** Stop here and wait for the user to say "Proceed" (or equivalent). Don't continue into Phase 2 on your own — Phase 1 is expensive to redo and the user needs a chance to correct scope before the dialectic starts. The only exception is Self-managed mode (below), which the user must request.
 
 ### If the prompt is too vague to do any of this
 
 Don't force it. Issue a **Diagnostic Gap Report** instead: name what's missing (a decidable question, a defined scope, a testable claim — whichever applies), ask for it directly, and don't proceed to the numbered steps above until it's resolved.
+
+## Self-managed mode (only when the user asks for it)
+
+Self-management is never the default. It applies only when the user explicitly tells you to self-manage the panel, or says so in equivalent words. It does not skip the Phase 1 halt: it replaces the user's check with a critical review by the session that holds the user's context.
+
+**Roles**
+- **Facilitator:** runs the panel. When a subagent tool is available, run the facilitator as a separate subagent with a fresh context, so the party reviewing Phase 1 did not write it. Give it the user's question and any constraints stated in it, and continue the same facilitator for later steps. Without a subagent tool, one session plays both roles; say so and note that independence is weaker.
+- **Executing session:** the session that received the user's request. It holds the question and everything said before it: decisions, constraints, stated preferences, earlier results.
+
+**Procedure**
+1. The facilitator completes Phase 1 and returns it without starting Phase 2.
+2. The executing session reads Phase 1 against the question and the session history that preceded it, and writes a **Phase 1 Response** to the facilitator. It must check: whether the question, its intent and the user's purpose were understood; context the facilitator lacked or got wrong; scope boundaries, thresholds and success criteria; roster members who do not belong or expertise that is missing; Consensus Corpus sources that are missing, inappropriate or out of date; and the Friction Map. For each problem, give what is wrong, the evidence from the question or session, and the correction requested. If no change is needed, say why. A Response that only approves is not allowed.
+3. The facilitator revises Phase 1, redoing any live searches the changes affect. It may decline a correction only with a stated reason. It shows a short **Correction Log** (item, change, reason).
+4. The panel proceeds to Phase 2 without waiting for the user.
+
+**Limits.** Everything else in this skill still applies: the Diagnostic Gap Report (if the Response finds the question cannot be scoped, issue it and stop), the live-search and citation rules, the fictional-persona guardrail and the safety redlines. If a wrong scope guess would be costly or irreversible, halt and ask the user even in this mode. The Phase 3 report states that the run was self-managed and includes the Correction Log.
 
 ## Phase 2 — The High-Stakes Dialectic
 

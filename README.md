@@ -11,12 +11,12 @@ Each one is a custom [Agent Skill](https://platform.claude.com/docs/en/agents-an
 | [`delta-sync-maintenance`](skills/delta-sync-maintenance/SKILL.md) | Reviews recent chats in a Claude Project and turns the confirmed facts into a refreshed Project Instructions block. | "run delta-sync" |
 | [`memory-dream`](skills/memory-dream/SKILL.md) | Audits Claude's persistent memory for contradictions, stale or duplicate facts, and bloat, then proposes a cleanup plan and applies only what you approve. Scheduled runs are report-only. | "clean up my memory" |
 | [`prompt-maestro`](skills/prompt-maestro/SKILL.md) | Writes, fixes, and adapts prompts for a specific AI tool (LLMs, coding agents, image, video, voice, and workflow tools). Based on prompt-master by nidhinjs, MIT. | "write a prompt for Midjourney" |
-| [`qc-sweep`](skills/qc-sweep/SKILL.md) | Runs a 12-step quality-control review of an existing document and returns a tabulated fix menu ranked Critical, Major, or Minor. | "run a QC sweep on this document" |
+| [`qc-sweep`](skills/qc-sweep/SKILL.md) | Runs a 12-step quality-control review of an existing document and returns a tabulated fix menu ranked Critical, Major, or Minor. Also checks cross-references, numbering, and defined terms. | "run a QC sweep on this document" |
 | [`qc-sweep-xlsx`](skills/qc-sweep-xlsx/SKILL.md) | Runs the same style of 12-step review on a spreadsheet or workbook, covering formulas, hidden content, links, and data integrity. | "run a QC sweep on this workbook" |
 | [`reverse-outlining-documents`](skills/reverse-outlining-documents/SKILL.md) | Extracts the heading hierarchy of an existing document into a read-only outline with structural notes. | "reverse outline this" |
 | [`text-humanization`](skills/text-humanization/SKILL.md) | Rewrites AI-drafted or stilted text so it reads as natural, human-written prose. | "humanize this draft" |
 | [`thread-archivist`](skills/thread-archivist/SKILL.md) | Packages a conversation into one copy-paste block (background, decisions, open items, next step) for continuing in a new chat. | "archive this thread" |
-| [`truth-seeking-panel`](skills/truth-seeking-panel/SKILL.md) | Stress-tests a claim or decision with a panel of fictional expert personas, cross-examination, and a scored resilience report. | "run the truth-seeking panel on this" |
+| [`truth-seeking-panel`](skills/truth-seeking-panel/SKILL.md) | Stress-tests a claim or decision with a panel of fictional expert personas, cross-examination, and a scored resilience report. Offers an optional self-managed mode on request. | "run the truth-seeking panel on this" |
 
 ## Install
 

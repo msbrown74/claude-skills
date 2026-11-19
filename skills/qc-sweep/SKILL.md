@@ -1,6 +1,6 @@
 ---
 name: "qc-sweep"
-description: "Runs a rigorous 12-step quality-control review of an EXISTING document (reports, specs, proposals, memos, technical deliverables, letters) and returns a tabulated, selectable fix menu — every issue classified Critical, Major, or Minor, given a reason, and paired with a proposed fix (lettered when a fix has options) that the user picks by ID to apply. Covers editing artifacts, structure/formatting, content accuracy, completeness, clarity, grammar/style, data and visuals, citations (with mandatory external verification), visual rendering QA, and final compliance. Use when the user asks to \"run a QC sweep\", \"QC this document\", \"quality check this report\", \"review this document for quality\", \"do a document QC review\", \"proofread and quality-check this\", or \"run the 12-step review\". Do NOT use to CREATE or write a new document (use docx / pdf / pptx), to summarize a document's content (answer directly), or to review source code (use code-review)."
+description: "Runs a rigorous 12-step quality-control review of an EXISTING document (reports, specs, proposals, memos, technical deliverables, letters) and returns a tabulated, selectable fix menu — every issue classified Critical, Major, or Minor, given a reason, and paired with a proposed fix (lettered when a fix has options) that the user picks by ID to apply. Covers editing artifacts, structure/formatting, cross-references and numbering, defined terms, content accuracy, completeness, clarity, grammar/style, data and visuals, citations (with mandatory external verification), visual rendering QA, and final compliance. Use when the user asks to \"run a QC sweep\", \"QC this document\", \"quality check this report\", \"review this document for quality\", \"do a document QC review\", \"proofread and quality-check this\", or \"run the 12-step review\". Do NOT use to CREATE or write a new document (use docx / pdf / pptx), to summarize a document's content (answer directly), or to review source code (use code-review)."
 ---
 
 # QC-Sweep
@@ -37,7 +37,7 @@ User: "Run a QC sweep on this report"  (file in input/)
    infer one, state it as an assumption, and confirm before enforcing.
 3. STEPS 2-12 — Work the sweep in order, recording findings with severity.
 4. Present a TABULATED fix menu with severity-prefixed IDs (C1, C2… M1, M2… N1, N2…):
-   Critical → Major → Minor, each issue with its reason and proposed fix (letter the
+   Critical → Major → Minor, each issue with its type (Mechanical/Substantive), reason, and proposed fix (letter the
    options — M4A/M4B/M4C — when a fix has alternatives).
 5. The user replies with the IDs/letters to apply; apply only those, re-run
    rendering QA (Step 11), save the revised file, and loop if they want another round.
@@ -76,6 +76,16 @@ Verify headings, numbering, fonts, spacing, and bullet lists are consistent and
 compliant with the chosen standard, and that the outline is complete — no
 dangling, orphaned, or incomplete structural elements.
 
+**Cross-references and numbering integrity.** Confirm every internal reference
+resolves: "see Section 4.2", "Table 3", "Figure 5", "Appendix B", "Equation 2",
+and page references must point to a target that exists and carries that number
+and title. Confirm section, table, figure, equation, and appendix numbering runs
+in sequence with no gaps, skips, or duplicates. In `.docx` files, also flag Word
+fields (REF cross-references, SEQ captions, TOC, page numbers) whose displayed
+result is stale or shows an error such as "Error! Reference source not found."
+A reference to a missing target is Major; one that sends the reader to the wrong
+content is Critical.
+
 ### Step 4 — Visual rendering QA (initial pass)
 Render the document in its intended format (convert `.docx`/`.pdf` pages to images
 and `Read` them) and verify layout integrity: page breaks, widows/orphans, table
@@ -85,6 +95,14 @@ plain text does not reveal.
 ### Step 5 — Content accuracy
 Check that facts, figures, and statements are internally consistent. Flag
 contradictions, obvious errors, and claims presented without adequate support.
+
+**Defined terms and naming.** List the document's defined terms (capitalized
+terms, terms introduced in quotes or parentheses, glossary and abbreviation
+entries) and check each one: defined before first use, used at least once after
+being defined (flag defined-but-unused), defined only once and consistently, and
+capitalized consistently (Owner vs. owner, Engineer vs. engineer). Flag the same
+entity called by different names (e.g., "the Plant", "the WTP", "the facility")
+and acronyms used before they are spelled out or spelled out more than once.
 
 ### Step 6 — Completeness
 Confirm all required sections are present and fully developed. Flag unresolved
@@ -158,7 +176,7 @@ Whether shown inline or written to the saved file, use this structure:
 2. **Severity summary** — counts of Critical / Major / Minor and an overall
    **go / no-go** verdict.
 3. **Findings table (the fix menu)** — one table with the columns
-   `ID | Severity | Location | Finding | Reason | Proposed fix`.
+   `ID | Severity | Type | Location | Finding | Reason | Proposed fix`.
    - **IDs are severity-prefixed and sequential within each group:** `C1, C2, C3…`
      then `M1, M2, M3…` then `N1, N2, N3…`. Rows run Critical first, then Major,
      then Minor. Never reuse an ID.
@@ -169,12 +187,27 @@ Whether shown inline or written to the saved file, use this structure:
      the Proposed fix cell — `M4A`, `M4B`, `M4C` — each a distinct, self-contained
      alternative (e.g. M4A reword, M4B delete the sentence, M4C add a supporting
      citation). The user picks at most one letter per finding.
+   - **Type** is `Mechanical` or `Substantive`. Mechanical = changes form, not
+     meaning: spelling, punctuation, capitalization, spacing, numbering
+     sequence, a defined term's spelling made consistent with its definition.
+     Substantive = could change what the document says or requires: any number,
+     unit, date, or threshold; a defined term's definition; requirement language
+     (shall/should/may); a technical statement; adding or deleting a sentence.
+     When in doubt, mark it Substantive.
+   - **Batch row for bulk mechanical fixes.** When there are about 5 or more
+     Minor, Mechanical fixes of the same kind (e.g., spelling and punctuation),
+     group them into ONE row with a single ID (e.g., `N7` — 27 spelling/
+     punctuation fixes) instead of one row each. Itemize them as `N7.1`,
+     `N7.2`… with location and before → after text: directly under the table for
+     a small document, in the saved report for a large one. Never batch a
+     Substantive fix or a Critical/Major finding — those always get their own row.
 4. **Citation verification log** — each checked claim, the source consulted, and
    verified / unverified. (Belongs in the QC report only — never in the document.)
 5. **Selection prompt** — tell the user exactly how to choose: reply with the IDs
    they want applied, adding a letter for any lettered finding — e.g.
    `C1, M3, M4B, N2`. Also accept ranges within one group (`C1-C3`), `all critical`,
-   `all major`, `all minor`, `all`, or `none`.
+   `all major`, `all minor`, `all`, or `none`. For a batch row, accept the
+   whole batch (`N7`) or the batch minus items (`N7 except N7.3, N7.12`).
 
 ### File naming (defaults; the user's stated convention overrides)
 - **Saved QC report:** `YYYY-MM-DD QC Report - <Document Subject>.md`, using the
@@ -195,13 +228,33 @@ After the user replies with their selection:
    chosen option. Ignore every finding the user did not select.
 2. Apply the fixes with the format-appropriate editor (`docx` for Word, `pdf` for
    PDF). Change only what the selected fixes specify — nothing else.
-3. Re-run **Step 11 (visual rendering QA)** and re-verify the edited passages so
-   no fix introduced a new problem (layout shift, table reflow, broken citation).
+   - **Preserve fields.** Word cross-references, captions, TOC entries, and page
+     numbers are live fields that read as plain text. Edit only the text runs
+     around a field; never replace a whole paragraph or run that contains one,
+     which flattens it to static text. If a fix renumbers anything, update the
+     dependent fields rather than retyping their results.
+   - **Tracked changes only when asked.** If the user's prompt asks for tracked
+     changes (redlines, revisions), write each applied fix as a native Word
+     tracked change, never a simulated redline (colored or struck-through text).
+     Attribute every tracked change and comment to the user's name as given in
+     their preferences or profile — never "Claude", overriding the docx skill's
+     default author; if the name is unknown, ask. Otherwise apply fixes directly.
+   - **Leave existing review marks alone.** Never accept or reject tracked
+     changes already in the document, or delete its comments, as clean-up —
+     only when a selected finding says to.
+3. **Read back every edited range** from the saved file and confirm it holds the
+   intended text, font, and paragraph style; check the paragraphs on either side
+   for collateral changes (formatting spilling into a neighbor, a flattened
+   field, a list merged with the next one). Then re-run **Step 11 (visual
+   rendering QA)** so no fix introduced a new problem (layout shift, table
+   reflow, broken citation).
 4. Save the revised document to `output/` under a new name (see File naming);
    never overwrite the user's original.
 5. Report back: which IDs were applied, which were skipped, and any new issue the
    recheck found — re-listed in the same table format so the user can run another
-   selection round.
+   selection round. Report only what you actually changed and read back; say
+   "all" or "every" only if you verified every instance (e.g., "applied 25 of 27
+   items in N7; N7.3 and N7.12 not found at the stated location").
 
 ## Guardrails
 - **Context gate (Step 1) is mandatory.** If type/purpose/audience/risk/standard
@@ -223,5 +276,8 @@ After the user replies with their selection:
   Never apply an unselected fix, and never auto-rewrite the whole document.
 - **Preserve the original.** Save revisions as a new file in `output/`; never
   overwrite or rename the user's uploaded document, and re-run rendering QA after applying.
+- **Never flatten fields or clear review marks.** Preserve Word fields when
+  applying fixes, and never accept, reject, or delete existing tracked changes or
+  comments unless a selected fix calls for it.
 - **Order matters.** Remove editing artifacts (Step 2) before other checks, and
   re-run rendering QA (Step 11) after any revisions.
