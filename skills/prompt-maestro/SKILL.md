@@ -2,7 +2,7 @@
 name: prompt-maestro
 license: MIT
 metadata:
-  version: "1.2.0"
+  version: "1.2.1"
 description: Writes, fixes, improves, and adapts prompts for a specific AI tool (LLMs, coding agents, image, video, 3D, voice, and workflow tools). Use when the user explicitly asks for a prompt, for example "write a prompt for Midjourney", "improve this prompt", "adapt this prompt for Claude", "fix my prompt", or "make a Cursor prompt". Do NOT use for general chat, coding, or document writing (use docx, pptx, or xlsx for files). Based on prompt-master by nidhinjs (Nidhin Joseph Nelson), MIT.
 ---
 
@@ -257,7 +257,7 @@ patterns.md is a copy of the file as downloaded from the main branch of the orig
 This skill is a derivative work of **prompt-master** by nidhinjs (Nidhin Joseph Nelson), https://github.com/nidhinjs/prompt-master, used under the MIT License. It was derived from the version 1.8.2 text of that skill. references/patterns.md is a copy of the file as downloaded from the upstream main branch, matching commit 769bf64 (version 1.8.2), checked 2026-10-15. references/templates.md was derived from the same commit and edited in version 1.1.0 to remove duplicated and stock text.
 
 Original work: Copyright (c) 2026 Nidhin Joseph Nelson
-Modifications: Copyright (c) 2026 Mikael Brown
+Modifications: Copyright (c) 2026 msbrown74
 
 The following copyright and permission notice applies to the substantial portions of the original work retained in this skill:
 

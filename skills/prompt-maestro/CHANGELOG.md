@@ -1,5 +1,13 @@
 # prompt-maestro changelog
 
+## v1.2.1 (2026-11-26)
+
+Authorship correction.
+
+### SKILL.md
+- Modifications copyright line now names the GitHub user name msbrown74 instead of a personal name. The upstream copyright to Nidhin Joseph Nelson is unchanged.
+- Frontmatter version 1.2.1.
+
 ## v1.2.0 (2026-11-23)
 
 Role lines restored at the owner's request.
