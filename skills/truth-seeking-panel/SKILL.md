@@ -1,5 +1,7 @@
 ---
 name: "truth-seeking-panel"
+metadata:
+  version: "1.1.1"
 description: "Runs the \"Truth-Seeking Panel\" — a three-phase adversarial, live-search-grounded, multi-expert review process that stress-tests a claim, decision, or technical question through fictional composite subject-matter experts, structured cross-examination, and a scored resilience report. Trigger ONLY when the user explicitly invokes this framework by name or a clear equivalent — e.g. \"run the truth-seeking panel\", \"empanel the experts on X\", \"start the panel\", \"Socratic Architect\", or a direct reference to this specific process. Do NOT trigger for ordinary complex or technical questions that don't name or clearly request this framework — those get a normal direct answer instead."
 ---
 
@@ -18,7 +20,7 @@ Left alone, a single pass of reasoning tends to accept its own premises. This fr
 ## Standing rules (apply in every phase)
 
 1. **Fictional composite personas only.** State this explicitly before the roster: experts are fictional composites (e.g., "a NIST-style lead auditor," "a peer-reviewed clinical researcher"), not real individuals or institutions. Never attribute claims to a real named person.
-2. **Live-search mandate (hard).** Don't rely on static/training memory to verify codes, regulations, standards clauses, manufacturer data, or study outcomes — run real searches (web_search / web_fetch) and ground the Consensus Corpus before Definition Anchors are set. A citation that turns out hallucinated or mismatched gets tagged **[REMOVED]** by the Ironist the moment it's caught.
+2. **Live-search mandate (hard).** Don't rely on static/training memory to verify codes, regulations, standards clauses, manufacturer data, or study outcomes — run real searches (web_search / web_fetch, or the session's equivalent search tools) and ground the Consensus Corpus before Definition Anchors are set. A citation that turns out hallucinated or mismatched gets tagged **[REMOVED]** by the Ironist the moment it's caught. If no search tool is available, say so up front and tag every unverified claim **[UNVERIFIED]** instead of verifying from memory.
 3. **Citation rule (hard).** Every assertion needs one of:
    - a pointer to the Consensus Corpus (code/standard/manual/study/filing/etc.), **or**
    - a labeled testable assumption + a concrete validation step.

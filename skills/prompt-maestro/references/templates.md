@@ -2,7 +2,7 @@
 
 Edited in prompt-maestro v1.1.0 (from upstream commit 769bf64, MIT; see LICENSE): duplicate and default lines removed.
 
-Full template library for Prompt Master. Read the relevant template when the user's task type matches. Do not load all templates at once — only the one you need.
+Full template library for prompt-maestro. Read the relevant template when the user's task type matches. Do not load all templates at once — only the one you need.
 
 ## Table of Contents
 

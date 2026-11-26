@@ -1,5 +1,7 @@
 ---
 name: "qc-sweep"
+metadata:
+  version: "1.3.0"
 description: "Runs a rigorous 12-step quality-control review of an EXISTING document (reports, specs, proposals, memos, technical deliverables, letters) and returns a tabulated, selectable fix menu — every issue classified Critical, Major, or Minor, given a reason, and paired with a proposed fix (lettered when a fix has options) that the user picks by ID to apply. Covers editing artifacts, structure/formatting, cross-references and numbering, defined terms, content accuracy, completeness, clarity, grammar/style, data and visuals, citations (with mandatory external verification), visual rendering QA, and final compliance. Use when the user asks to \"run a QC sweep\", \"QC this document\", \"quality check this report\", \"review this document for quality\", \"do a document QC review\", \"proofread and quality-check this\", or \"run the 12-step review\". Do NOT use to CREATE or write a new document (use docx / pdf / pptx), to summarize a document's content (answer directly), or to review source code (use code-review)."
 ---
 
@@ -25,8 +27,8 @@ its own.
 - **Summarizing** what a document says, or answering a question about it →
   answer directly; no QC report needed.
 - **Reviewing source code** — use code-review instead.
-- **Applying** the fixes (rather than finding them) → only after the user
-  reviews this report and explicitly asks; QC is a read-and-report pass.
+- **Applying fixes the user has not selected by ID** → never; QC reports first
+  and applies only the IDs the user picks from the menu.
 
 ## Quick Start
 ```
@@ -47,7 +49,8 @@ User: "Run a QC sweep on this report"  (file in input/)
 
 ### Step 0 — Locate and load the document
 - Find the file in `input/` first (`Glob input/**/*`); also check `grounding/`.
-  If the message has an `<attached_files>` block, read those paths directly.
+  If the message has an `<attached_files>` block, read those paths directly. If
+  there is no `input/` folder, use the file the user attached or named.
 - Read with the format-appropriate path: `.docx` → the `docx` skill (so you can
   detect tracked changes/comments and render to images); `.pdf` → the `pdf`
   skill; plain text/markdown → `Read`.
@@ -59,14 +62,14 @@ Identify and record: **document type, purpose, intended audience, risk tier, and
 the required formatting + citation standard** (APA, MLA, Chicago, AWWA, IEEE,
 ASME, or a project-specific guideline). Every later check is judged against these.
 - **If any of these — especially the formatting/citation standard — is unclear or
-  missing, STOP and ask the user** (via `AskUserQuestion`) before proceeding.
+  missing, STOP and ask the user** (via `AskUserQuestion` if available, otherwise in plain chat) before proceeding.
 - If, after asking, none is provided, you MAY infer a likely standard from the
   domain and available context (including the user's profession — e.g. water-
   resources engineering often implies AWWA or a project spec). You **must** state
   the inferred standard explicitly as an assumption and **confirm it with the user
   before enforcing it.**
 
-### Step 2 — Remove editing artifacts FIRST
+### Step 2 — Detect and flag editing artifacts FIRST
 Before any other review, detect and flag: tracked changes, comments, duplicated
 text, draft/placeholder markers, and version-control leftovers. These come first
 because they distort every downstream check.
@@ -162,7 +165,8 @@ content; otherwise small):
 - **Large document** → render inline a **concise summary** (header + severity
   summary) followed by the **full findings table**, THEN save the complete,
   detailed report (every finding with its location, evidence, citation
-  verification log, and fix rationale) as a separate Markdown file in `output/`,
+  verification log, and fix rationale) as a separate Markdown file in `output/` (or the session's working folder if
+  there is no `output/`),
   named per the file-naming rules below. Glob-confirm the file exists before
   telling the user where it is.
 - **Never put the QC report inside the document** — no appended pages or
@@ -248,8 +252,9 @@ After the user replies with their selection:
    field, a list merged with the next one). Then re-run **Step 11 (visual
    rendering QA)** so no fix introduced a new problem (layout shift, table
    reflow, broken citation).
-4. Save the revised document to `output/` under a new name (see File naming);
-   never overwrite the user's original.
+4. Save the revised document to `output/` (or the session's working folder if
+   there is no `output/`) under a new name (see File naming); never overwrite the
+   user's original.
 5. Report back: which IDs were applied, which were skipped, and any new issue the
    recheck found — re-listed in the same table format so the user can run another
    selection round. Report only what you actually changed and read back; say
@@ -267,7 +272,7 @@ After the user replies with their selection:
   it or reference it by location instead, and respect the document's privacy.
 - **Every finding gets a severity and a reason.** No unclassified or unexplained issues.
 - **The report never goes into the document.** No QC pages, comments, or inserted
-  sections unless the user explicitly asks for one.
+  sections.
 - **Never fabricate.** Do not invent the document's contents, sources, or quotes.
   If a file cannot be read, say so and ask for a re-attach — never substitute
   sample or placeholder content.
@@ -279,5 +284,5 @@ After the user replies with their selection:
 - **Never flatten fields or clear review marks.** Preserve Word fields when
   applying fixes, and never accept, reject, or delete existing tracked changes or
   comments unless a selected fix calls for it.
-- **Order matters.** Remove editing artifacts (Step 2) before other checks, and
+- **Order matters.** Flag editing artifacts (Step 2) before other checks, and
   re-run rendering QA (Step 11) after any revisions.

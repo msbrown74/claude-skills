@@ -1,5 +1,7 @@
 ---
 name: "delta-sync-maintenance"
+metadata:
+  version: "1.0.1"
 description: "Audits chat sessions since the last run in a Claude Project, extracts new facts as a memory-delta changelog, and produces a refreshed Project Instructions block. Complements Claude's native per-project memory rather than duplicating it — use specifically to promote confirmed facts into the standing Custom Instructions layer, which native memory cannot write to. Trigger when the user says \"run delta-sync\", \"refresh project instructions\", \"sync project memory\", \"catch up my project's instructions\", or \"update project memory from recent chats\". Do NOT use for one-off memory capture — Claude's native per-project memory already handles that. Do NOT use to summarize a single chat session — that's a plain recap, not an instruction sync."
 ---
 
@@ -55,7 +57,7 @@ Project scope, core technology/subject matter, operational environment.
 </context>
 
 <memory_architecture>
-Four layers, not three — the platform already provides two of these automatically:
+Four layers — the platform already provides two of these automatically:
 1. Active Session Context: current chat (highest immediate priority).
 2. Native Memory (automatic): Claude's built-in per-project memory. Runs on its own; this skill does not duplicate it.
 3. Project Knowledge (RAG): attached files, retrieved as relevant rather than loaded in full.

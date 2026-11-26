@@ -1,5 +1,18 @@
 # prompt-maestro changelog
 
+## v1.2.2 (2026-11-26)
+
+Editorial fixes from an audit of v1.2.1.
+
+### SKILL.md
+- Output format line 2: added the missing space after the comma before the lightbulb.
+
+### references/model-profiles.md
+- The contents list pointed to "Profiles in SKILL.md not re-verified"; the section is titled "Profiles in tool-profiles.md not re-verified". The list item now matches.
+
+### references/templates.md
+- Intro line named "Prompt Master" (the upstream project); it now names this skill, prompt-maestro.
+
 ## v1.2.1 (2026-11-26)
 
 Authorship correction.

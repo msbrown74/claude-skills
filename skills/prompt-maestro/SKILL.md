@@ -2,7 +2,7 @@
 name: prompt-maestro
 license: MIT
 metadata:
-  version: "1.2.1"
+  version: "1.2.2"
 description: Writes, fixes, improves, and adapts prompts for a specific AI tool (LLMs, coding agents, image, video, 3D, voice, and workflow tools). Use when the user explicitly asks for a prompt, for example "write a prompt for Midjourney", "improve this prompt", "adapt this prompt for Claude", "fix my prompt", or "make a Cursor prompt". Do NOT use for general chat, coding, or document writing (use docx, pptx, or xlsx for files). Based on prompt-master by nidhinjs (Nidhin Joseph Nelson), MIT.
 ---
 
@@ -36,7 +36,7 @@ Build prompts one at a time, ready to paste.
 
 Follow this format:
 1. A single copyable prompt block ready to paste into the target tool
-2. 🎯 Target: [tool name],💡 [One sentence of 20 words or fewer: what was optimized]
+2. 🎯 Target: [tool name], 💡 [One sentence of 20 words or fewer: what was optimized]
 3. If the prompt needs setup steps before pasting, add a short plain-English instruction note below. 1-2 lines max. ONLY when genuinely needed.
 
 Templates are menus: omit fields the request does not need, add no unrequested section, state each requirement once; never omit a stop-and-ask trigger or scope lock.

@@ -11,7 +11,7 @@ Part of the prompt-maestro skill, a derivative of prompt-master by nidhinjs (Nid
 - Grok / xAI
 - Claude Code
 - Codex CLI / ChatGPT Work / Codex IDE
-- Profiles in SKILL.md not re-verified
+- Profiles in tool-profiles.md not re-verified
 
 ---
 
