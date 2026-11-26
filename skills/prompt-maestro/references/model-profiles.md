@@ -81,13 +81,12 @@ Verified:
 - Reserve generous room for reasoning plus output when first experimenting (OpenAI suggests at least 25,000 tokens).
 
 From upstream (still consistent with the above):
-- Start lean. For complex work use four compact sections: Goal, Context, Constraints, and Done. State each instruction once.
+- Start lean. For complex work use compact sections: Goal, Context, Constraints, Output format, and Done. State each instruction once; Done lists only checks not stated above.
 - GPT-5.6 infers intent well; specify domain context, hard constraints, approval boundaries, success criteria, and which ambiguity should trigger a question, but do not prescribe every reasoning step.
 - Define autonomy clearly: safe in-scope local inspection, edits, and validation may proceed; external writes, destructive actions, purchases, and material scope expansion require confirmation.
 - Use the lowest reasoning effort that meets the quality bar.
 - Recommend higher effort or `reasoning.mode: "pro"` only when measured quality justifies the added latency and cost.
 - State tool-use expectations and required evidence explicitly. Use programmatic or multi-agent tool orchestration only for bounded work that divides cleanly.
-- Never request hidden reasoning. Ask for conclusions, assumptions, evidence, and checks.
 - Control visible length with the output contract (and `text.verbosity` in the API), not by asking for less thinking.
 
 [Unverified] The exact slugs `gpt-5.6-terra` and `gpt-5.6-luna`; ChatGPT picker availability by plan; the ChatGPT and Codex controls named Sol Pro, Max, and Ultra; the Responses multi-agent beta. Do not translate ChatGPT UI controls into API parameters.

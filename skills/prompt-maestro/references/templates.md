@@ -1,5 +1,7 @@
 # Prompt Templates Reference
 
+Edited in prompt-maestro v1.1.0 (from upstream commit 769bf64, MIT; see LICENSE): duplicate and default lines removed.
+
 Full template library for Prompt Master. Read the relevant template when the user's task type matches. Do not load all templates at once — only the one you need.
 
 ## Table of Contents
@@ -197,15 +199,15 @@ Desired Change:
 
 Scope:
 Only modify [function / component / section].
-Do NOT touch: [list everything to leave unchanged]
+Do NOT touch: [only named items inside the scope that must stay unchanged]
+Stop and ask before: [edits outside scope, dependency changes, signature changes]
 
 Constraints:
 - Language/framework: [specify version]
-- Do not add dependencies not in [package.json / requirements.txt]
 - Preserve existing [type signatures / API contracts / variable names]
 
 Done When:
-[Exact condition that confirms the change worked correctly]
+[Binary checks not already stated above]
 ```
 
 ---
@@ -230,14 +232,10 @@ Allowed Actions:
 
 Forbidden Actions:
 - Do NOT modify files outside [directory/scope]
-- Do NOT run the dev server or deploy
-- Do NOT push to git
-- Do NOT delete files without showing a diff first
-- Do NOT make architecture decisions without human approval
 
 Stop Conditions:
 Pause and ask for human review when:
-- A file would be permanently deleted
+- A file would be deleted or overwritten, or anything would be pushed, deployed, published, sent, or spent
 - A new external service or API needs to be integrated
 - Two valid implementation paths exist and the choice affects architecture
 - An error cannot be resolved in 2 attempts
@@ -403,18 +401,15 @@ Run these in order. Each output feeds the next.
 ## Context
 [What exists now — relevant files, current behavior, stack already in place, what was tried and failed]
 
-## Target State
-[What done looks like — specific files changed, behavior produced, tests passing. Binary where possible.]
-
 ## Scope
 - Work only in: [specific files and directories]
-- Do NOT touch: [forbidden files — .env, package-lock.json, configs, anything outside scope]
+- Do NOT touch: [only files inside the work area that must stay unchanged; omit if none]
 
 ## Constraints
 - [Stack version, naming conventions, no new dependencies without asking]
 - Only make changes directly requested. Do not add features, abstractions, or files beyond what was asked.
 
-## Acceptance Criteria
+## Acceptance Criteria (target state as binary checks; state each once)
 - [ ] [Binary check 1]
 - [ ] [Binary check 2]
 - [ ] [Binary check 3]
@@ -423,8 +418,8 @@ Run these in order. Each output feeds the next.
 - Proceed with reversible, in-scope inspection, edits, and validation.
 - Stop and ask before destructive or irreversible actions, external writes, purchases, material scope expansion, or decisions that require user-only input.
 
-## Progress Evidence
-For long-running work, report progress only when it changes or when a checkpoint is reached. Ground every completion claim in a tool result, changed artifact, or verification output.
+## Progress Evidence (long-running work only; omit for tasks of a few steps)
+Report progress only when it changes or at a checkpoint. Ground every completion claim in a tool result, changed artifact, or verification output.
 ```
 
 **Effort** — configure in the API or harness rather than requesting private reasoning in the prompt. Start with the model default, lower it for routine scoped work, and raise it only when task difficulty warrants the cost.

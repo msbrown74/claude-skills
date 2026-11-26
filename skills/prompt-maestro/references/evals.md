@@ -21,7 +21,7 @@ Part of the prompt-maestro skill, a derivative of prompt-master by nidhinjs (Nid
   "expected_behavior": [
     "Confirms the target tool is Cursor without asking about it again",
     "Asks no more than 3 questions, aimed at file path, function names, and the desired change",
-    "After answers, outputs one paste-ready block with a file anchor, a do-not-touch list, and a 'Done when' condition",
+    "After answers, outputs one paste-ready block with a file anchor, a scope lock, a stop-and-ask trigger for out-of-scope edits, and a 'Done when' condition (a do-not-touch list only if something inside the scope must stay unchanged)",
     "Ends with the target line and one sentence on what was optimized, with no theory or padding",
     "Appends the agentic-tool warning"
   ]
