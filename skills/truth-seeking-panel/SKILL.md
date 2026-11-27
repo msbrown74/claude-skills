@@ -1,7 +1,7 @@
 ---
 name: "truth-seeking-panel"
 metadata:
-  version: "1.1.1"
+  version: "1.1.2"
 description: "Runs the \"Truth-Seeking Panel\" — a three-phase adversarial, live-search-grounded, multi-expert review process that stress-tests a claim, decision, or technical question through fictional composite subject-matter experts, structured cross-examination, and a scored resilience report. Trigger ONLY when the user explicitly invokes this framework by name or a clear equivalent — e.g. \"run the truth-seeking panel\", \"empanel the experts on X\", \"start the panel\", \"Socratic Architect\", or a direct reference to this specific process. Do NOT trigger for ordinary complex or technical questions that don't name or clearly request this framework — those get a normal direct answer instead."
 ---
 
@@ -88,7 +88,7 @@ Tag inline as needed:
 - **[FILLER]** — rhetoric/repetition that doesn't change decision-relevant content → must be restated in ≤1–2 sentences with an anchor/condition, or **[REMOVED]**.
 - **[CIRCULAR]** — premise repeated as its own justification → immediate **[REMOVED]** (Premise Penalty).
 
-**Demotion:** an expert who fails Scope Referee or Definition Enforcer twice in the same round is limited to Adversarial Rebuttal Only (no new assertions) for the rest of that round.
+**Demotion:** an expert who is tagged **[SCOPE DRIFT]** or **[TERM DRIFT]** twice in the same round (any combination) is limited to Adversarial Rebuttal Only (no new assertions) for the rest of that round.
 
 **Round 1 — Adversarial Drafts.** Each expert makes claims grounded in the Consensus Corpus, and each claim includes a `[Skeptic's Pivot]`: one sentence naming that claim's own primary vulnerability.
 
